@@ -1,0 +1,63 @@
+body {
+    background-color: #999920;
+    margin-top: unset;
+    margin-bottom: unset;
+}
+
+.block {
+    width: 100%;
+    clear: both;
+}
+
+#wrapper {
+    height: calc(100vh - 8px);
+    width: 600px;
+    margin: auto;
+    margin-top: 8px;
+}
+
+#txtUser {
+    width: 173px;
+}
+
+#left, #right {
+    margin-top: 8px;
+    height: calc(100% - 100px);
+    float: left;
+}
+
+#left {
+    width: 30%;
+    background-color: goldenrod;
+}
+
+#right {
+    width: 70%;
+    background-color: aliceblue;
+}
+
+#txtMessage, #btnSend {
+    float: left;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+
+#txtMessage {
+    width: 80%;
+}
+
+#btnSend {
+    width: 14%;
+}
+
+#title {
+    padding: 5px;
+    text-align: center;
+    background-color: aquamarine;
+}
+
+#message {
+    height: calc(100% - 32px);
+    overflow: auto;
+}

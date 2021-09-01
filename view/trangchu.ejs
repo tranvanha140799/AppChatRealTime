@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <link>
+        <meta charset="utf-8" />
+        <title>Hello SocketIO</title>
+        <link rel="stylesheet" type="text/css" href="main.css"/>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="jquery-3.6.0.min.js"></script>
+        <script>
+            var socket = io('http://localhost:3000');
+
+            socket.on("server_send_errorsignup", function(data) {
+                alert("\"" + data + "\"" + " cannot be set as username at the moment! Please choose another name...");
+            });
+
+            socket.on("server_send_successsignup", function(data) {
+                var temp = "<div socketId=\"" + data.id + "\" class=\"user\">" + data.userName + "</div>";
+                $("#usersList").append(temp);
+                if(socket.id === data.id) {
+                    // hide sign up form
+                    $(".signup").hide(1000);
+                }
+            });
+
+            socket.on("server_send_message", function(data) {
+                var userName = "<span class=\"username\">" + data.userName + "</span>";
+                var msg = "<span class=\"msg\">" + data.msg + "</span>";
+                $("#message").append(userName + ": " + msg + "<div class=\"block\"></div>");
+                // window.scrollTo(0,document.querySelector("#message").scrollHeight);
+                var element = document.getElementById("message");
+                element.scrollTop = element.scrollHeight - element.clientHeight;
+            });
+
+            socket.on("server_handle_tease", function(data) {
+                alert(data + " vừa chọc bạn :D");
+            });
+
+            $(document).ready(function () {
+                $("#btnSignup").click(function() {
+                    socket.emit("client_send_username", $("#txtUser").val());
+                });
+
+                $("#btnSend").click(function() {
+                    if($("#txtMessage").val() === '')
+                        return;
+                    else {
+                        socket.emit("client_send_message", $("#txtMessage").val());
+                        $("#txtMessage").val("");
+                    }
+                });
+            });
+
+            $(document).on("click", ".user", function() {
+                var id = $(this).attr("socketId");
+                socket.emit("user_tease_user", id);
+            });
+
+            $(document).on('keypress', "#txtUser", function (e) {
+                if(e.keyCode == 13){
+                    $("#btnSignup").click();
+                }
+            });
+
+            $(document).on('keypress', "#txtMessage", function (e) {
+                if(e.keyCode == 13){
+                    $("#btnSend").click();
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="signup">
+                <input type="text" id="txtUser" placeholder="Username"/>
+                <input type="button" id="btnSignup" value="Đăng Ký"/>
+            </div>
+            <div class="block"></div>
+            <div id="left">
+                <div id="title">Users Online</div>
+                <div id="usersList"></div>
+            </div>
+            <div id="right">
+                <div id="message"></div>
+                <div class="block"></div>
+                <input type="text" id="txtMessage" placeholder="Nhập tin nhắn..."/>
+                <input type="button" id="btnSend" value="Gửi"/>
+            </div>
+        </div>
+    </body>
+</html>
